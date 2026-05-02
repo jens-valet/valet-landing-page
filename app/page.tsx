@@ -1,19 +1,19 @@
+import Image from "next/image";
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="page">
       <header className="topbar">
-        <div className="mini-logo" aria-label="Valet">
-          <span className="slash" style={{ opacity: 0.3 }}>
-            /
-          </span>
-          <span className="slash" style={{ opacity: 0.55 }}>
-            /
-          </span>
-          <span className="slash" style={{ opacity: 0.82 }}>
-            /
-          </span>
-          <span className="v">V</span>
-          <span className="alet">ALET</span>
+        <div className="mini-logo">
+          <Image
+            className="mini-logo-img"
+            src="/branding/logo-v-main.svg"
+            alt="Valet"
+            width={147}
+            height={110}
+            unoptimized
+          />
         </div>
         <span className="topbar-meta">
           EST {"\u00b7"} 2026
@@ -21,23 +21,19 @@ export default function Home() {
       </header>
 
       <main className="hero">
-        <h1 className="wordmark" aria-label="Valet">
-          <span className="slash s1">/</span>
-          <span className="slash s2">/</span>
-          <span className="slash s3">/</span>
-          <span className="v">V</span>
-          <span className="alet">ALET</span>
+        <h1 className="wordmark">
+          <Image
+            className="wordmark-img wordmark-img--deck"
+            src="/branding/logo-white-w-gold-w-line.svg"
+            alt="Valet — Drive more, stress less"
+            width={181}
+            height={66}
+            unoptimized
+            priority
+          />
         </h1>
 
-        <div className="tagline-wrap">
-          <span className="tag-line" aria-hidden={true} />
-          <span className="tagline-text">
-            Drive More {"\u00b7"} Stress Less
-          </span>
-          <span className="tag-line" aria-hidden={true} />
-        </div>
-
-        <div className="divider" role="presentation" />
+        <div className="divider divider-after-logo" role="presentation" />
 
         <p className="blurb">
           The modern homebase for collector-car ownership. Value intelligence,
@@ -49,21 +45,18 @@ export default function Home() {
         </p>
 
         <div className="cta-row">
-          <a
-            className="btn btn-primary"
-            href="mailto:hello@valet.app?subject=Valet%20Inquiry"
-          >
+          <Link className="btn btn-primary" href="/deck">
             Learn More
             <span className="arrow" aria-hidden={true}>
               &rsaquo;
             </span>
-          </a>
+          </Link>
         </div>
       </main>
 
       <footer className="foot">
         <span>&copy; 2026 Valet</span>
-        <a href="mailto:hello@valet.app">hello@valet.app</a>
+        <a href="mailto:johnny@valet.app">johnny@valet.app</a>
       </footer>
     </div>
   );

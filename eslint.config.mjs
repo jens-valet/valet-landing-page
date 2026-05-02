@@ -12,7 +12,14 @@ const compat = new FlatCompat({
 /** @type {import("eslint").Linter.Config[]} */
 const eslintConfig = [
   {
-    ignores: [".next/**", "out/**", "node_modules/**", "build/**"],
+    ignores: [
+      ".next/**",
+      "out/**",
+      "node_modules/**",
+      "build/**",
+      // Next.js maintains triple-slash refs here; ESLint forbids editing it.
+      "next-env.d.ts",
+    ],
   },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];

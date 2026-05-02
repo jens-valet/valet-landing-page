@@ -1,0 +1,9 @@
+<svg width="32" height="32" viewBox="0 0 147 147" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Square viewBox so tab / home-screen crops match the V mark -->
+  <g transform="translate(0 18.5)">
+    <path d="M52.7358 109.351L83.3048 0.090004H102.822L80.8919 86.8022H82.5792L123.103 0.090004H146.085L90.5997 109.351H52.7302H52.7358Z" fill="#B8963E"/>
+    <path d="M46.7564 109.261H30.3386L61.4531 7.62939e-06H77.4603L46.7564 109.261Z" fill="#B8963E" fill-opacity="0.7"/>
+    <path d="M23.9929 109.261H13.554L44.6741 7.62939e-06H54.7025L23.9986 109.261H23.9929Z" fill="#B8963E" fill-opacity="0.5"/>
+    <path d="M6.68748 109.536H0L31.1201 0.269829H37.397L6.68748 109.536Z" fill="#B8963E" fill-opacity="0.3"/>
+  </g>
+</svg>
