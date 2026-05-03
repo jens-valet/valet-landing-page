@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 // Note: Deck unlocking is intentionally NOT persisted. Refresh requires re-entry.
 import { DeckLogoWhiteGoldLineImg, DeckVMarkImg } from "@/components/deck/deckBranding";
 import { CompetitiveBenchmark } from "@/components/deck/CompetitiveBenchmark";
@@ -23,22 +23,62 @@ const DECK_IFRAME_DEBUG =
   typeof process !== "undefined" && process.env.NEXT_PUBLIC_DECK_IFRAME_DEBUG === "true";
 const DECK_DEMO_IFRAME_SRC = `${WEBAPP_ORIGIN}/deck-demo${DECK_IFRAME_DEBUG ? "?deckDemoDebug=1" : ""}`;
 
+/**
+ * Reveal when the element intersects the viewport. Uses a callback ref so we never miss setup when
+ * ref.current was still null on first effect (Strict Mode / hydration) — that left FadeIn stuck at
+ * opacity 0. Geometry check + delayed fallback catch stubborn Safari / nested-layout IO gaps.
+ */
 function useInView() {
-  const ref = useRef(null);
   const [v, setV] = useState(false);
+  const genRef = useRef(0);
+  const observerRef = useRef(null);
+  const rafRef = useRef(null);
+  const fallbackRef = useRef(null);
 
-  useEffect(() => {
-    const el = ref.current;
+  const ref = useCallback((el) => {
+    genRef.current += 1;
+    const gen = genRef.current;
+
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+      observerRef.current = null;
+    }
+    if (rafRef.current != null) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
+    if (fallbackRef.current != null) {
+      clearTimeout(fallbackRef.current);
+      fallbackRef.current = null;
+    }
+
     if (!el) return;
 
-    const reveal = () => setV(true);
+    const reveal = () => {
+      if (gen !== genRef.current) return;
+      setV(true);
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
+      if (fallbackRef.current != null) {
+        clearTimeout(fallbackRef.current);
+        fallbackRef.current = null;
+      }
+    };
 
-    /** Above-the-fold slides must not depend on IO alone (Safari / nested layout can miss first intersection). */
     const overlapsViewport = () => {
       const r = el.getBoundingClientRect();
       const vh = window.innerHeight || document.documentElement.clientHeight;
       const vw = window.innerWidth || document.documentElement.clientWidth;
-      return r.height >= 0 && r.width >= 0 && r.bottom > -120 && r.top < vh + 120 && r.right > 0 && r.left < vw;
+      return (
+        r.height >= 0 &&
+        r.width >= 0 &&
+        r.bottom > -160 &&
+        r.top < vh + 160 &&
+        r.right > -80 &&
+        r.left < vw + 80
+      );
     };
 
     if (typeof IntersectionObserver === "undefined") {
@@ -48,28 +88,31 @@ function useInView() {
 
     const o = new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) {
+        if (e.isIntersecting || e.intersectionRatio > 0) {
           reveal();
-          o.unobserve(el);
         }
       },
-      { threshold: 0, rootMargin: "120px 0px" },
+      { threshold: [0, 0.01], rootMargin: "160px 0px" },
     );
+    observerRef.current = o;
     o.observe(el);
 
-    const syncLoId = requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        if (overlapsViewport()) {
-          reveal();
-          o.unobserve(el);
-        }
+    const armRaf = () => {
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = requestAnimationFrame(() => {
+          rafRef.current = null;
+          if (gen !== genRef.current) return;
+          if (overlapsViewport()) reveal();
+        });
       });
-    });
-
-    return () => {
-      cancelAnimationFrame(syncLoId);
-      o.disconnect();
     };
+    armRaf();
+
+    fallbackRef.current = window.setTimeout(() => {
+      fallbackRef.current = null;
+      if (gen !== genRef.current) return;
+      if (overlapsViewport()) reveal();
+    }, 800);
   }, []);
 
   return [ref, v];

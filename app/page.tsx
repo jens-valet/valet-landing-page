@@ -58,7 +58,21 @@ export default function Home() {
       </main>
 
       <footer className="foot">
-        <span>&copy; 2026 Valet</span>
+        <div className="foot-brand">
+          <div className="foot-logo" aria-hidden={true}>
+            <Image
+              className="foot-logo-img"
+              src="/branding/logo-v-main.svg"
+              alt=""
+              width={147}
+              height={110}
+              unoptimized
+            />
+          </div>
+          <span className="foot-copy">
+            &copy; 2026 Valet Ventures Inc. All rights reserved.
+          </span>
+        </div>
         <div className="foot-links">
           <Link href="/privacy" className="foot-link-subtle">
             Privacy

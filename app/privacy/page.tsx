@@ -5,8 +5,7 @@ import { DeckVMarkImg } from "@/components/deck/deckBranding";
 
 export const metadata: Metadata = {
   title: "Privacy Policy · Valet",
-  description:
-    "How Valet collects, uses, and protects information when you use our collector-car platform.",
+  description: "Short overview of what Valet collects, why, and how to reach us.",
 };
 
 export default function PrivacyPolicyPage() {
@@ -21,104 +20,45 @@ export default function PrivacyPolicyPage() {
 
       <main className="privacy-main">
         <h1 className="privacy-h1-deck">Privacy Policy</h1>
-        <p className="privacy-meta-line">Last updated · May 3, 2026</p>
-
-        <p className="privacy-lede">
-          This Privacy Policy describes how Valet (&quot;we,&quot; &quot;us,&quot; or
-          &quot;our&quot;) handles information when you use our mobile-first automotive
-          platform that connects collector-car ownership with niche communities. This is a
-          practical overview designed for users and stakeholders; it is not legal advice.
+        <p className="privacy-meta-line">
+          Effective · May 3, 2026 · Valet
         </p>
-
-        <section className="privacy-section" aria-labelledby="privacy-overview">
-          <h2 id="privacy-overview" className="privacy-h2">
-            Overview
-          </h2>
-          <p>
-            Valet helps enthusiasts organize vehicles around a Vehicle Identification Number
-            (VIN), understand collection-related insights (such as values and carrying-cost
-            views), and participate in regional and topic-based communities. Providing those
-            features requires collecting and processing certain account, vehicle, usage, and
-            optional location information as described below.
-          </p>
-        </section>
 
         <section className="privacy-section" aria-labelledby="privacy-collect">
           <h2 id="privacy-collect" className="privacy-h2">
-            Information we collect from you
+            What we collect
           </h2>
-          <ul className="privacy-list">
-            <li>
-              <strong>Account and profile.</strong> Information you provide when creating or
-              maintaining an account, such as name, email address, and authentication data.
-              Passwords and tokens are handled using standard authentication practices; we do
-              not store passwords in plain text.
-            </li>
-            <li>
-              <strong>Vehicle and VIN data.</strong> VINs and related vehicle details you enter
-              so we can build your portfolio, forecasts, and ownership context. You choose what
-              you add; removing vehicles may limit related features.
-            </li>
-            <li>
-              <strong>User-generated content.</strong> Photos, posts, comments, reactions,
-              event tags (for example Cars &amp; Coffee), forum-style threads, and other content
-              you submit in community areas. Content may be visible to other users depending on
-              community visibility settings.
-            </li>
-            <li>
-              <strong>Subscription and commerce signals.</strong> Whether you have access to paid
-              features such as Communities. Payments are processed by platform billing providers
-              (for example Apple App Store in-app purchase flows); we do not receive your full
-              payment card number from those systems.
-            </li>
-          </ul>
-        </section>
-
-        <section className="privacy-section" aria-labelledby="privacy-auto">
-          <h2 id="privacy-auto" className="privacy-h2">
-            Information collected automatically
-          </h2>
-          <ul className="privacy-list">
-            <li>
-              <strong>Location.</strong> Where you grant permission, approximate location may be
-              used to suggest regional communities and surface nearby enthusiast activity.
-              You can adjust permissions in your device settings.
-            </li>
-            <li>
-              <strong>Usage and diagnostics.</strong> Interaction signals such as screens viewed,
-              taps, session timing, device model, OS version, language, and crash or stability
-              reports from analytics and crash-reporting tools to improve reliability and
-              performance.
-            </li>
-          </ul>
-        </section>
-
-        <section className="privacy-section" aria-labelledby="privacy-third">
-          <h2 id="privacy-third" className="privacy-h2">
-            Third-party services and sharing
-          </h2>
-          <ul className="privacy-list">
-            <li>
-              <strong>Backend and storage.</strong> We use Supabase (hosted Postgres, auth, and
-              related infrastructure) to operate the product. Data is processed according to
-              provider documentation and our configuration.
-            </li>
-            <li>
-              <strong>Automotive data providers.</strong> To generate valuations, history,
-              specifications, and related insights, VINs and derived queries may be sent to
-              third-party automotive APIs (for example industry data partners such as Hagerty,
-              Carfax, Classic.com, or similar integrations). Those providers process requests
-              under their own terms and privacy notices.
-            </li>
-            <li>
-              <strong>Analytics.</strong> Crash and product analytics vendors help us detect
-              regressions and prioritize fixes.
-            </li>
-          </ul>
           <p>
-            We do <strong>not</strong> sell your personal information to data brokers. We share
-            information only as needed to operate Valet, comply with law, protect safety, or with
-            vendors acting on our instructions.
+            When you create an account we collect your name, email address, and password. Payments go
+            through payment partners—we never store full card numbers on our servers. Depending on what
+            you use, we may also store garage and VIN details you add, community posts or uploads,
+            subscription status, and diagnostics that help the product run smoothly. We receive typical
+            usage signals (such as pages viewed and searches), device basics (browser and OS), a rough
+            sense of location from IP where applicable, and cookies or tokens needed for sessions.
+          </p>
+        </section>
+
+        <section className="privacy-section" aria-labelledby="privacy-use">
+          <h2 id="privacy-use" className="privacy-h2">
+            How we use your information
+          </h2>
+          <p>
+            We use your information to operate Valet—garage and ownership tools, valuations and related
+            insights where available, communities and alerts, and paid plans—to route billing through our
+            processors, improve reliability and relevance, send service messages and (with your choices)
+            product updates, and detect misuse or fraud.
+          </p>
+        </section>
+
+        <section className="privacy-section" aria-labelledby="privacy-share">
+          <h2 id="privacy-share" className="privacy-h2">
+            Disclosure
+          </h2>
+          <p>
+            We do not sell your personal information. We share it only with vendors who help us run the
+            product (for example hosting, authentication, payment processing, automotive data lookups,
+            and analytics—often in aggregated form), when the law requires it, or if the business is sold
+            or reorganized with comparable privacy commitments.
           </p>
         </section>
 
@@ -127,26 +67,23 @@ export default function PrivacyPolicyPage() {
             Retention
           </h2>
           <p>
-            We keep information for as long as your account is active and as needed to deliver the
-            service, maintain security, comply with legal obligations, and resolve disputes.
-            Some backups or logs may persist for a limited period after deletion.
+            We keep account information while your account is active and work to remove personal profile
+            data shortly after you ask us to delete your account, aside from limited backups that expire on
+            a rolling schedule. Records tied to payments may be kept longer where bookkeeping or tax rules
+            call for it. Analytics we rely on is stored in stripped-down or aggregated form where we can.
           </p>
         </section>
 
         <section className="privacy-section" aria-labelledby="privacy-rights">
           <h2 id="privacy-rights" className="privacy-h2">
-            Your choices and rights
+            Your choices
           </h2>
-          <ul className="privacy-list">
-            <li>
-              Access, correction, or deletion requests may be available depending on your region.
-              Contact us using the email below and we will respond consistent with applicable law.
-            </li>
-            <li>
-              You may opt out of optional notifications or adjust location and analytics settings
-              where your platform allows.
-            </li>
-          </ul>
+          <p>
+            You can ask to access, fix, or delete personal information associated with your account,
+            request a copy of garage-related data where we can export it, and opt out of marketing email
+            using the link in those messages. California residents may have extra rights under the CCPA,
+            including learning categories of data we collect and asking for deletion where allowed.
+          </p>
         </section>
 
         <section className="privacy-section" aria-labelledby="privacy-security">
@@ -154,8 +91,22 @@ export default function PrivacyPolicyPage() {
             Security
           </h2>
           <p>
-            We use administrative, technical, and organizational measures designed to protect
-            personal information. No online service can guarantee absolute security.
+            We protect traffic with HTTPS, encrypt sensitive data at rest where practical, lean on our
+            payment vendors&apos; PCI-minded controls, and limit internal access. If we confirm a breach
+            that affects your personal information in a serious way, we will notify you as laws require
+            and without unreasonable delay.
+          </p>
+        </section>
+
+        <section className="privacy-section" aria-labelledby="privacy-cookies">
+          <h2 id="privacy-cookies" className="privacy-h2">
+            Cookies
+          </h2>
+          <p>
+            We use a small set of cookies or similar technologies: essentials that keep you logged in and
+            reduce abuse, preference helpers such as theme or recent activity, and lightweight analytics
+            for anonymous usage patterns. You can limit cookies in your browser; turning off essentials may
+            break sign-in or core features.
           </p>
         </section>
 
@@ -164,19 +115,8 @@ export default function PrivacyPolicyPage() {
             Children
           </h2>
           <p>
-            Valet is not directed at children under 13 (or the minimum age required in your
-            jurisdiction). If you believe we have collected information from a child, contact us
-            and we will take appropriate steps.
-          </p>
-        </section>
-
-        <section className="privacy-section" aria-labelledby="privacy-international">
-          <h2 id="privacy-international" className="privacy-h2">
-            International users
-          </h2>
-          <p>
-            If you use Valet from outside the United States, your information may be processed in
-            the United States or other countries where we or our vendors operate.
+            Valet isn&apos;t aimed at young children, and we don&apos;t knowingly collect personal data
+            from anyone under 13. If you believe we did, email us and we will address it.
           </p>
         </section>
 
@@ -185,9 +125,8 @@ export default function PrivacyPolicyPage() {
             Changes to this policy
           </h2>
           <p>
-            We may update this Privacy Policy from time to time. When we do, we will revise the
-            &quot;Last updated&quot; date above and, where appropriate, provide additional notice
-            in the app.
+            We may refresh this page from time to time. When we make an important change we&apos;ll note it
+            here and may email you or show an in-product notice.
           </p>
         </section>
 
@@ -196,17 +135,21 @@ export default function PrivacyPolicyPage() {
             Contact
           </h2>
           <p>
-            Questions about this policy or your information:{" "}
+            Privacy questions:{" "}
             <a href="mailto:jens@valet.app">jens@valet.app</a>
           </p>
         </section>
       </main>
 
       <footer className="foot privacy-foot privacy-foot-deck">
-        <Link href="/" className="privacy-foot-deck-v-link" aria-label="Valet home">
-          <DeckVMarkImg height={18} />
-        </Link>
-        <span className="privacy-foot-deck-meta">&copy; 2026 Valet · Privacy Policy</span>
+        <div className="foot-brand privacy-foot-deck-brand">
+          <Link href="/" className="privacy-foot-deck-v-link" aria-label="Valet home">
+            <DeckVMarkImg height={18} />
+          </Link>
+          <span className="privacy-foot-deck-meta">
+            &copy; 2026 Valet Ventures Inc. All rights reserved. · Privacy Policy
+          </span>
+        </div>
       </footer>
     </div>
   );

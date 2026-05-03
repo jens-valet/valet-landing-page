@@ -266,6 +266,25 @@
       animation: fadeIn 1s ease-out 1.6s forwards;
     }
 
+    .foot-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      text-align: left;
+    }
+
+    .foot-logo-img {
+      display: block;
+      height: 26px;
+      width: auto;
+    }
+
+    .foot-copy {
+      letter-spacing: 2px;
+      line-height: 1.35;
+    }
+
     .foot a {
       color: var(--muted);
       text-decoration: none;
@@ -329,6 +348,15 @@
         text-align: center;
         padding: 20px;
       }
+
+      .foot-brand {
+        justify-content: center;
+        text-align: center;
+      }
+
+      .foot-copy {
+        max-width: 20rem;
+      }
     }
   </style>
 </head>
@@ -371,7 +399,10 @@
     </main>
 
     <footer class="foot">
-      <span>&copy; 2026 Valet</span>
+      <div class="foot-brand">
+        <img class="foot-logo-img" src="branding/logo-v-main.svg" alt="" width="147" height="110" />
+        <span class="foot-copy">&copy; 2026 Valet Ventures Inc. All rights reserved.</span>
+      </div>
       <a href="mailto:johnny@valet.app">johnny@valet.app</a>
     </footer>
 

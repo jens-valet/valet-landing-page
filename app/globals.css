@@ -411,6 +411,30 @@ body {
   animation: fadeIn 1s ease-out 1.6s forwards;
 }
 
+.foot-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  text-align: left;
+}
+
+.foot-logo {
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.foot-logo-img {
+  display: block;
+  height: 26px;
+  width: auto;
+}
+
+.foot-copy {
+  letter-spacing: 2px;
+  line-height: 1.35;
+}
+
 .foot a {
   color: var(--muted);
   text-decoration: none;
@@ -586,6 +610,11 @@ a.foot-link-subtle:hover {
 .privacy-foot-deck {
   padding: 20px clamp(24px, 5vw, 48px);
   border-top-color: rgba(58, 97, 82, 0.22);
+  justify-content: flex-start;
+}
+
+.privacy-foot-deck-brand {
+  gap: 12px;
 }
 
 .privacy-foot-deck-meta {
@@ -594,7 +623,8 @@ a.foot-link-subtle:hover {
   letter-spacing: 1px;
   color: var(--gold);
   opacity: 0.35;
-  text-align: right;
+  text-align: left;
+  line-height: 1.35;
 }
 
 .privacy-foot-deck-v-link img {
@@ -832,6 +862,15 @@ a.foot-link-subtle:hover {
     gap: 10px;
     text-align: center;
     padding: 20px;
+  }
+
+  .foot-brand {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .foot-copy {
+    max-width: 20rem;
   }
 
   .foot-links {
