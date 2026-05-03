@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { WaitlistForm } from "@/components/WaitlistForm";
+
 export default function Home() {
   return (
     <div className="page">
@@ -44,19 +46,28 @@ export default function Home() {
           Launching soon.
         </p>
 
-        <div className="cta-row">
+        <div className="cta-stack">
           <Link className="btn btn-primary" href="/deck">
             Learn More
             <span className="arrow" aria-hidden={true}>
               &rsaquo;
             </span>
           </Link>
+          <WaitlistForm />
         </div>
       </main>
 
       <footer className="foot">
         <span>&copy; 2026 Valet</span>
-        <a href="mailto:johnny@valet.app">johnny@valet.app</a>
+        <div className="foot-links">
+          <Link href="/privacy" className="foot-link-subtle">
+            Privacy
+          </Link>
+          <span className="foot-links-sep" aria-hidden={true}>
+            &middot;
+          </span>
+          <a href="mailto:johnny@valet.app">johnny@valet.app</a>
+        </div>
       </footer>
     </div>
   );

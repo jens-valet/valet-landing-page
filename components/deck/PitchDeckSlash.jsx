@@ -23,13 +23,59 @@ const DECK_IFRAME_DEBUG =
   typeof process !== "undefined" && process.env.NEXT_PUBLIC_DECK_IFRAME_DEBUG === "true";
 const DECK_DEMO_IFRAME_SRC = `${WEBAPP_ORIGIN}/deck-demo${DECK_IFRAME_DEBUG ? "?deckDemoDebug=1" : ""}`;
 
-function useInView(t = 0.12) {
-  const ref = useRef(null); const [v, setV] = useState(false);
-  useEffect(() => { const el = ref.current; if (!el) return; const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setV(true); o.unobserve(el); } }, { threshold: t }); o.observe(el); return () => o.disconnect(); }, [t]);
+function useInView() {
+  const ref = useRef(null);
+  const [v, setV] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const reveal = () => setV(true);
+
+    /** Above-the-fold slides must not depend on IO alone (Safari / nested layout can miss first intersection). */
+    const overlapsViewport = () => {
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const vw = window.innerWidth || document.documentElement.clientWidth;
+      return r.height >= 0 && r.width >= 0 && r.bottom > -120 && r.top < vh + 120 && r.right > 0 && r.left < vw;
+    };
+
+    if (typeof IntersectionObserver === "undefined") {
+      reveal();
+      return;
+    }
+
+    const o = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          reveal();
+          o.unobserve(el);
+        }
+      },
+      { threshold: 0, rootMargin: "120px 0px" },
+    );
+    o.observe(el);
+
+    const syncLoId = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (overlapsViewport()) {
+          reveal();
+          o.unobserve(el);
+        }
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(syncLoId);
+      o.disconnect();
+    };
+  }, []);
+
   return [ref, v];
 }
 function FadeIn({ children, delay = 0, style = {} }) {
-  const [ref, v] = useInView(0.08);
+  const [ref, v] = useInView();
   return <div ref={ref} style={{ ...style, opacity: v ? 1 : 0, transform: v ? "translateY(0)" : "translateY(28px)", transition: `opacity 0.7s ease ${delay}s, transform 0.7s ease ${delay}s` }}>{children}</div>;
 }
 function Badge({ size = 48 }) {
