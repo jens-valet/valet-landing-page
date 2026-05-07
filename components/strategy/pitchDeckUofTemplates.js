@@ -9,18 +9,26 @@ export const PRODUCT_INFRA_BREAKDOWN = [
   { category: "Storage", item: "File Storage & DB", y1: "$144", y2: "$401", logic: "100GB free; Overage at $0.021/GB." },
   { category: "Delivery", item: "CDN (Global Edge)", y1: "$1,200", y2: "$3,000", logic: "Metered caching (Cloudflare/Bunny)." },
   { category: "Ops", item: "Sentry & Datadog", y1: "$3,600", y2: "$6,000", logic: "$300-$500/mo for error/health tracking." },
-  { category: "Protection", item: "Security & WAF", y1: "$7,000", y2: "$25,000", logic: "DDoS shield + Year 2 SOC2 prep/Audits." },
-  { category: "TOTAL", item: "", y1: "$21,382", y2: "$51,309", logic: "Infrastructure & Reliability Only.", total: true },
+  { category: "Protection", item: "Security & WAF", y1: "$7,000", y2: "$15,000", logic: "DDoS shield + Year 2 SOC2 prep/Audits." },
+  { category: "TOTAL", item: "", y1: "$21,382", y2: "$41,309", logic: "Infrastructure & Reliability Only.", total: true },
 ];
 
-/** Product + Data Infra — top-level line items (amounts follow Year 1 / Year 2 MAU toggle). */
+/**
+ * Product + Data Infra — flat lines (Y1 ~$177K and Y2 ~$206K all-in incl. infra; Steward program is under Contractors + G&A).
+ */
 export const PRODUCT_DATA_INFRA_FLAT_LINES = [
   {
     label: "AI development stack",
-    y1: "$50,000",
-    y2: "$50,000",
+    y1: "$30,000",
+    y2: "$20,000",
+    logic: "Claude, Cursor, design tools, and other engineering productivity subscriptions.",
+  },
+  {
+    label: "AI costs",
+    y1: "$50,618",
+    y2: "$60,000",
     logic:
-      "Claude, Cursor, Lovable, Figma AI, design tools — staying ahead means paying for frontier tools.",
+      "LLM-backed market research, plus per-car valuations and ownership / carrying-cost passes. Runs on top of a shared research base and cached market context, so marginal cost per vehicle stays low.",
   },
   {
     label: "Email sequence system (Loops)",
@@ -35,106 +43,15 @@ export const PRODUCT_DATA_INFRA_FLAT_LINES = [
     logic: "Product analytics, session insight, and structured user feedback.",
   },
   {
-    label: "Engagement — Steward Program",
-    y1: "$48,000",
-    y2: "$120,000",
-    logic: "Steward-tier incentives, retention, and community engagement programs.",
-  },
-  {
-    label: "Car data APIs (auto.dev / vehicle history)",
-    y1: "$20,000",
-    y2: "$40,000",
-    logic: "VIN and plate decoding plus vehicle history and signal coverage.",
+    label: "Data sources",
+    y1: "$60,000",
+    y2: "$50,000",
+    logic: "Production-grade vehicle data, auction/history signals, and decoding (e.g. HammerPrice API path, complementary feeds).",
   },
 ];
 
-/**
- * AI $ model for Product + Data Infra — two buckets (no % split):
- * 1) Per-car onboarding & user-scoped flows — $/car × cars in fleet (MAU × cars/user).
- * 2) Monthly portfolio revaluations — $/vehicle-month (batch-friendly).
- */
-export const PRODUCT_AI_COST_MODEL = {
-  avgMauY1: 100_000,
-  avgMauY2: 250_000,
-  /** Garage depth for both buckets */
-  avgCarsPerUser: 2,
-  recalculationsPerCarPerYear: 12,
-  /** Onboarding / first-pass & user-scoped AI, $ per car in the modeled fleet (Y2 assumes improved efficiency). */
-  usdPerCarOnboardingYear1: 0.3,
-  usdPerCarOnboardingYear2: 0.25,
-  /** Blended $ per vehicle per monthly revaluation (batching similar cars). */
-  usdPerVehicleMonthValuationYear1: 0.04,
-  usdPerVehicleMonthValuationYear2: 0.03,
-};
-
-function mauForYear(year) {
-  const m = PRODUCT_AI_COST_MODEL;
-  return year === 1 ? m.avgMauY1 : m.avgMauY2;
-}
-
-function usdPerCarOnboardingForYear(year) {
-  const m = PRODUCT_AI_COST_MODEL;
-  return year === 1 ? m.usdPerCarOnboardingYear1 : m.usdPerCarOnboardingYear2;
-}
-
-function usdPerVehicleMonthValuationForYear(year) {
-  const m = PRODUCT_AI_COST_MODEL;
-  return year === 1 ? m.usdPerVehicleMonthValuationYear1 : m.usdPerVehicleMonthValuationYear2;
-}
-
-/** Onboarding & per-car user flows (annual USD): $/car × MAU × cars per user. */
-export function computeAiPerCarOnboardingUsd(year) {
-  const m = PRODUCT_AI_COST_MODEL;
-  const users = mauForYear(year);
-  const carsInFleet = users * m.avgCarsPerUser;
-  return Math.round(carsInFleet * usdPerCarOnboardingForYear(year));
-}
-
-/** Monthly valuation passes (annual USD): MAU × cars × 12 × $/vehicle-month. */
-export function computeAiMonthlyValuationsUsd(year) {
-  const m = PRODUCT_AI_COST_MODEL;
-  const users = mauForYear(year);
-  const vehicleMonths = users * m.avgCarsPerUser * m.recalculationsPerCarPerYear;
-  return Math.round(vehicleMonths * usdPerVehicleMonthValuationForYear(year));
-}
-
-function buildAiMonthlyValuationsLogicString() {
-  const m = PRODUCT_AI_COST_MODEL;
-  const r1 = m.usdPerVehicleMonthValuationYear1;
-  const r2 = m.usdPerVehicleMonthValuationYear2;
-  return [
-    `$${r1.toFixed(2)} (Y1) / $${r2.toFixed(2)} (Y2) per vehicle-month × MAU × ${m.avgCarsPerUser} cars × ${m.recalculationsPerCarPerYear} months.`,
-    "Assumes batching and shared prompts across similar vehicles to hold marginal cost at the vehicle-month unit.",
-  ].join(" ");
-}
-
-/**
- * Flat lines with two computed AI rows (before car data APIs).
- */
 export function getProductDataInfraFlatLines() {
-  const m = PRODUCT_AI_COST_MODEL;
-  const carsY1 = m.avgMauY1 * m.avgCarsPerUser;
-  const carsY2 = m.avgMauY2 * m.avgCarsPerUser;
-  const aiPerCar = {
-    label: "AI costs (per car)",
-    y1: formatUsdWhole(computeAiPerCarOnboardingUsd(1)),
-    y2: formatUsdWhole(computeAiPerCarOnboardingUsd(2)),
-    logic: [
-      `$${usdPerCarOnboardingForYear(1).toFixed(2)} (Y1) / $${usdPerCarOnboardingForYear(2).toFixed(2)} (Y2) per car × ${m.avgCarsPerUser} cars per user × MAU (~${Math.round(m.avgMauY1 / 1000)}k Y1 / ~${Math.round(m.avgMauY2 / 1000)}k Y2) → ~${Math.round(carsY1).toLocaleString("en-US")} / ~${Math.round(carsY2).toLocaleString("en-US")} cars in fleet.`,
-      "Onboarding, first-pass passes, and user-scoped flows — separate from batched monthly revaluations below.",
-    ].join(" "),
-  };
-
-  const aiMonthly = {
-    label: "AI costs (monthly valuations)",
-    y1: formatUsdWhole(computeAiMonthlyValuationsUsd(1)),
-    y2: formatUsdWhole(computeAiMonthlyValuationsUsd(2)),
-    logic: buildAiMonthlyValuationsLogicString(),
-  };
-
-  const car = PRODUCT_DATA_INFRA_FLAT_LINES.find((l) => l.label.startsWith("Car data APIs"));
-  const rest = PRODUCT_DATA_INFRA_FLAT_LINES.filter((l) => !l.label.startsWith("Car data APIs"));
-  return [...rest, aiPerCar, aiMonthly, car].filter(Boolean);
+  return [...PRODUCT_DATA_INFRA_FLAT_LINES];
 }
 
 /** Parse $21,382 / $50,000 style amounts (flat lines + infra totals). */
@@ -194,8 +111,32 @@ export function computeProductDataInfraGrandTotalUsd(year, allocationDetails = [
   return Math.round(sum);
 }
 
+/** Sum numeric values from allocation-style rows (ranges → midpoint; `incl. above` → 0). */
+export function sumAllocationDetailsUsd(details = []) {
+  return Math.round(details.reduce((acc, row) => acc + parseAllocUsd(row.v), 0));
+}
+
 export function formatUsdWhole(n) {
   return `$${Math.round(n).toLocaleString("en-US")}`;
+}
+
+/** Parse donut row amounts like `$484K`, `$1.43M`, `$882K`. */
+export function parseUseOfFundsAmountUsd(s) {
+  if (!s || typeof s !== "string") return 0;
+  const t = s.trim().replace(/^[$\s]+/, "").replace(/,/g, "");
+  const mi = t.match(/^([0-9.]+)\s*M$/i);
+  if (mi) return Math.round(parseFloat(mi[1]) * 1_000_000);
+  const ki = t.match(/^([0-9.]+)\s*K$/i);
+  if (ki) return Math.round(parseFloat(ki[1]) * 1_000);
+  const n = parseFloat(t);
+  return Number.isFinite(n) ? Math.round(n) : 0;
+}
+
+/** Compact total for raise-bucket footer (matches `pitchDeckModel` slice formatting). */
+export function formatRaiseBucketTotalUsd(usd) {
+  const m = usd / 1_000_000;
+  if (m >= 1) return `$${m.toFixed(2)}M`;
+  return `$${Math.round(m * 1000)}K`;
 }
 
 export const PITCH_DECK_UOF_Y1 = {
@@ -238,12 +179,13 @@ export const PITCH_DECK_UOF_Y1 = {
     note: "Y1 cadence: Q1 — 10 deals (prove messaging + conversion), Q2 — 12 deals (scale winners, seed regions), Q3 — 10 deals (summer event season), Q4 — 8 deals (year-end angles). Spend is a lever, not a fixed commitment — ranges flex based on performance.",
   },
   product: {
-    details: [{ r: "Brand expansion + corpus build", v: "$50,000" }],
-    note: "Includes upgrading from MVP-grade APIs to production-grade data sources (MarketCheck) and structuring enterprise LLM licensing so the free Garage wedge scales efficiently.",
+    details: [],
+    note: "Includes upgrading from MVP-grade APIs to production-grade data sources (HammerPrice API, etc.) and structuring enterprise LLM licensing so the free Garage wedge scales efficiently.",
   },
   gna: {
     details: [
       { r: "UX polish, lifecycle messaging, notifications", v: "$200K–$300K" },
+      { r: "Engagement - Steward Program", v: "$48k" },
       { r: "Moderation systems, App Store readiness", v: "incl. above" },
       { r: "QA, crash analytics integration", v: "incl. above" },
       { r: "Legal (financing counsel, corp setup, ToS/privacy)", v: "$120K–$180K" },
@@ -289,12 +231,13 @@ export const PITCH_DECK_UOF_Y2 = {
     note: "Y2 shifts toward performance-based terms: lower guaranteed base, higher conversion kickers. Marketing efficiency improves as organic flywheel contributes.",
   },
   product: {
-    details: [{ r: "Brand expansion + corpus build", v: "$50,000" }],
+    details: [],
     note: "Focus shifts to scaling efficiency: enterprise vendor contracts, caching expensive lookups, optimizing per-car variable cost at volume.",
   },
   gna: {
     details: [
       { r: "Post-launch iteration speed", v: "$300K–$450K" },
+      { r: "Engagement - Steward Program", v: "$95k" },
       { r: "Moderation tooling improvements", v: "incl. above" },
       { r: "Growth experimentation (no permanent hires)", v: "incl. above" },
       { r: "Deeper QA + performance optimization", v: "incl. above" },
@@ -304,3 +247,29 @@ export const PITCH_DECK_UOF_Y2 = {
     note: "Contractor spend increases to support post-launch iteration velocity without premature full-time headcount commitments.",
   },
 };
+
+/**
+ * Sum of Contractors + G&A template line items (ranges use midpoint; `incl. above` → 0).
+ * @param {1|2} year
+ */
+export function computeGnaDetailsSubtotalUsd(year) {
+  const data = year === 1 ? PITCH_DECK_UOF_Y1 : PITCH_DECK_UOF_Y2;
+  return sumAllocationDetailsUsd(data.gna.details);
+}
+
+/**
+ * Dollar label beside a use-of-funds row: match the visible detail rows instead of the model bucket.
+ * Product includes infra + flat-line totals; the other rows sum their listed details.
+ * @param {{ key?: string, label: string, amount: string, details?: { r: string, v: string }[] }} row
+ * @param {1|2} year
+ */
+export function formatUofSummarizedRowAmount(row, year) {
+  const details = row.details ?? [];
+  if (row.key === "product" || row.label === "Product + Data Infra") {
+    return formatRaiseBucketTotalUsd(computeProductDataInfraGrandTotalUsd(year, details));
+  }
+  if (details.length > 0) {
+    return formatRaiseBucketTotalUsd(sumAllocationDetailsUsd(details));
+  }
+  return row.amount;
+}

@@ -5,7 +5,7 @@ import PitchDeckSlash from "@/components/deck/PitchDeckSlash";
 
 /**
  * Mirrors webapp `Deck.jsx` for the public investor deck (no Supabase demo cleanup on landing).
- * Loaded only on the client via `dynamic(..., { ssr: false })` from `app/deck/page.tsx`.
+ * Loaded from `DeckGate` via `next/dynamic` with `{ ssr: false }` so Recharts initializes only in a client chunk.
  */
 export default function DeckPage() {
   useEffect(() => {

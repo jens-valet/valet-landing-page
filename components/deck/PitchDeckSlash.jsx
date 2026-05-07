@@ -7,6 +7,8 @@ import { CompetitiveBenchmark } from "@/components/deck/CompetitiveBenchmark";
 import { DeckCrossMetricBenchmarkChart } from "@/components/deck/DeckCrossMetricBenchmarkChart";
 import { C } from "@/components/deck/pitchDeckColors";
 import ProductDataInfraDetails from "@/components/strategy/ProductDataInfraDetails";
+import GnaUofDetails from "@/components/strategy/GnaUofDetails";
+import { formatUofSummarizedRowAmount } from "@/components/strategy/pitchDeckUofTemplates";
 
 /**
  * Live garage demo iframe: load webapp `/deck-demo`, which signs in the Edge-configured
@@ -281,26 +283,26 @@ function UseOfFundsInteractive() {
   const [year, setYear] = useState(1);
   const [selected, setSelected] = useState(null);
   const y1 = [
-    { label: "Team + Salary", value: 31, pct: "31%", color: C.charcoalLight, amount: "$575K", details: [{ r: "CEO (Johnny)", v: "$200K" }, { r: "CTO (Jens)", v: "$150K" }, { r: "Infra Engineer", v: "$150K" }, { r: "Employer burden (~15%)", v: "$75K" }], note: "Core salaries protected for 2 full years. Contractors excluded - they sit under G&A so runway reads as core team only." },
-    { label: "Distribution / Launch", value: 33, pct: "33%", color: C.goldDark, amount: "$745K", details: [
+    { label: "Team + Salary", value: 26, pct: "26%", color: C.charcoalLight, amount: "$975K", details: [{ r: "CEO (Johnny)", v: "$200K" }, { r: "CTO (Jens)", v: "$150K" }, { r: "Infra Engineer", v: "$150K" }, { r: "Employer burden (~15%)", v: "$75K" }], note: "Core salaries protected for 2 full years. Contractors excluded - they sit under G&A so runway reads as core team only." },
+    { label: "Distribution / Launch", value: 38, pct: "38%", color: C.goldDark, amount: "$1.43M", details: [
       { r: "Tier A - Flagship anchors (4 × $125K)", v: "$500K", sub: "1 YouTube integration (60-90s) or dedicated segment, 2 short-form cutdowns, 3 story frames with link + promo code, 60-day link placement, optional 30-day usage rights" },
       { r: "Tier B - Mid-tier growth (6 × $25K)", v: "$150K", sub: "1 integration or dedicated short-form, plus 1 follow-up story bundle. CTA optimized to \"Add your VIN → unlock your local community\"" },
       { r: "Tier C - Niche/micro (6 × $8K)", v: "$48K", sub: "1 short-form + story bundle, geo/niche targeted to seed density in specific marques and metros" },
       { r: "Events & Activations", v: "$47K", sub: "12 Cars & Coffee ($2K ea), 4 regional marque events ($4K ea), 1 flagship activation ($7K)" },
     ], note: "Y1 cadence: Q1 - 4 deals (prove messaging), Q2 - 6 deals (scale winners), Q3 - 4 deals (event season), Q4 - 2 deals. Spend is a lever - flexes based on conversion data." },
-    { label: "Product + Data Infra", value: 14, pct: "14%", color: C.greenMid, amount: "$225K", details: [{ r: "Brand expansion + corpus build", v: "$50,000" }], note: "Includes upgrading from MVP-grade APIs to production-grade data sources (MarketCheck) and structuring enterprise LLM licensing so the free Garage wedge scales efficiently." },
-    { label: "Contractors + G&A", value: 22, pct: "22%", color: C.gold, amount: "$350K", details: [{ r: "UX polish, lifecycle messaging, moderation", v: "$200K" }, { r: "Legal (corp setup, ToS/privacy, SAFE docs)", v: "$100K" }, { r: "Bookkeeping, D&O insurance, admin", v: "$50K" }], note: "Contractors are a deliberate lever to move fast without premature full-time headcount." },
+    { label: "Product + Data Infra", value: 13, pct: "13%", color: C.greenMid, amount: "$484K", details: [], note: "Includes upgrading from MVP-grade APIs to production-grade data sources (HammerPrice API, etc.) and structuring enterprise LLM licensing so the free Garage wedge scales efficiently." },
+    { label: "Contractors + G&A", value: 23, pct: "23%", color: C.gold, amount: "$846K", details: [{ r: "UX polish, lifecycle messaging, moderation", v: "$200K" }, { r: "Engagement - Steward Program", v: "$48k" }, { r: "Legal (corp setup, ToS/privacy, SAFE docs)", v: "$100K" }, { r: "Bookkeeping, D&O insurance, admin", v: "$50K" }], note: "Contractors are a deliberate lever to move fast without premature full-time headcount." },
   ];
   const y2 = [
-    { label: "Team + Salary", value: 31, pct: "31%", color: C.charcoalLight, amount: "$575K", details: [{ r: "CEO (Johnny)", v: "$200K" }, { r: "CTO (Jens)", v: "$150K" }, { r: "Infra Engineer", v: "$150K" }, { r: "Employer burden", v: "$75K" }], note: "Same 2-year reserve. Core team stability maintained regardless of market conditions." },
-    { label: "Distribution / Launch", value: 27, pct: "27%", color: C.goldDark, amount: "$495K", details: [
+    { label: "Team + Salary", value: 26, pct: "26%", color: C.charcoalLight, amount: "$975K", details: [{ r: "CEO (Johnny)", v: "$200K" }, { r: "CTO (Jens)", v: "$150K" }, { r: "Infra Engineer", v: "$150K" }, { r: "Employer burden", v: "$75K" }], note: "Same 2-year reserve. Core team stability maintained regardless of market conditions." },
+    { label: "Distribution / Launch", value: 35, pct: "35%", color: C.goldDark, amount: "$1.31M", details: [
       { r: "Tier A - Renew top performers (3 × $80K)", v: "$240K", sub: "Proven partners from Y1 with established audience trust and validated conversion metrics" },
       { r: "Tier B - Performance-structured (8 × $18K)", v: "$144K", sub: "Lower base + conversion kicker tied to paid Communities subscriptions. Shifts spend toward proven ROI" },
       { r: "Tier C - Broader seeding (6 × $6K)", v: "$36K", sub: "Expand geographic and marque coverage into new niche metros" },
       { r: "Events & Activations", v: "$75K", sub: "18 Cars & Coffee ($2K ea), 6 regional events ($5K ea), 1 flagship ($9K)" },
     ], note: "Y2 shifts toward performance-based terms: lower guaranteed base, higher conversion kickers. Marketing efficiency improves as organic flywheel contributes." },
-    { label: "Product + Data Infra", value: 16, pct: "16%", color: C.greenMid, amount: "$300K", details: [{ r: "Brand expansion + corpus build", v: "$50,000" }], note: "Focus shifts to scaling efficiency: enterprise vendor contracts, caching expensive lookups, optimizing per-car variable cost at volume." },
-    { label: "Contractors + G&A", value: 26, pct: "26%", color: C.gold, amount: "$485K", details: [{ r: "Post-launch UX iteration, moderation, QA", v: "$300K" }, { r: "Ongoing legal/compliance", v: "$120K" }, { r: "Accounting, insurance, admin", v: "$65K" }], note: "Contractor spend increases post-launch to support iteration velocity without premature full-time headcount." },
+    { label: "Product + Data Infra", value: 15.47, pct: "15%", color: C.greenMid, amount: "$580K", details: [], note: "Focus shifts to scaling efficiency: enterprise vendor contracts, caching expensive lookups, optimizing per-car variable cost at volume." },
+    { label: "Contractors + G&A", value: 23.53, pct: "24%", color: C.gold, amount: "$882K", details: [{ r: "Post-launch UX iteration, moderation, QA", v: "$300K" }, { r: "Engagement - Steward Program", v: "$95k" }, { r: "Ongoing legal/compliance", v: "$120K" }, { r: "Accounting, insurance, admin", v: "$65K" }], note: "Contractor spend increases post-launch to support iteration velocity without premature full-time headcount." },
   ];
   const data = year === 1 ? y1 : y2;
   const sel = selected !== null && selected < data.length ? data[selected] : null;
@@ -316,13 +318,15 @@ function UseOfFundsInteractive() {
             <div key={i} onClick={() => setSelected(selected === i ? null : i)} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", borderRadius: 6, cursor: "pointer", background: selected === i ? C.greenPrimary : "transparent", border: `1px solid ${selected === i ? C.gold + "44" : "transparent"}`, marginBottom: 4, transition: "all 0.2s ease" }}>
               <div style={{ width: 14, height: 14, borderRadius: 3, background: d.color, flexShrink: 0 }} />
               <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: 13, color: C.cream, flex: 1 }}>{d.label} <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: C.goldLight }}>{d.pct}</span></span>
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: C.gold }}>{d.amount}</span>
+              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: C.gold }}>{formatUofSummarizedRowAmount(d, year)}</span>
             </div>
           ))}
           {sel && <div style={{ marginTop: 16, padding: 20, background: C.greenPrimary, borderRadius: 8, border: `1px solid ${C.gold}33` }}>
             <div style={{ fontFamily: "'Saira Extra Condensed', sans-serif", fontWeight: 800, fontStyle: "italic", fontSize: 20, color: C.gold, marginBottom: 12 }}>{sel.label}</div>
             {sel.label === "Product + Data Infra" ? (
               <ProductDataInfraDetails year={year} allocationDetails={sel.details} />
+            ) : sel.label === "Contractors + G&A" ? (
+              <GnaUofDetails details={sel.details} />
             ) : (
               sel.details.map((d, i) => (
                 <div key={i} style={{ padding: "6px 0", borderBottom: i < sel.details.length - 1 ? `1px solid ${C.greenMid}33` : "none" }}>
@@ -350,7 +354,7 @@ function MilestoneTimeline() {
     { period: "0-6 MO", title: "PRODUCTION READINESS", num: "01", items: [
       "Infrastructure and storage hardening",
       "Monitoring and cost controls",
-      "Upgrade data layer to production-grade sources (MarketCheck API)",
+      "Upgrade data layer to production-grade sources (HammerPrice API, etc.)",
       "Enterprise LLM licensing for cost-efficient scaling",
       "Expand brand coverage beyond initial 7 brands",
       "Launch-ready UX polish",

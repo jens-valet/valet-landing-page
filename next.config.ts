@@ -1,8 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /** Recharts is CommonJS-heavy; transpiling avoids intermittent runtime `__webpack_modules__[id] is not a function`. */
-  transpilePackages: ["recharts"],
+  /**
+   * Recharts (and `recharts-scale`) are CommonJS-heavy; transpiling avoids intermittent runtime
+   * `__webpack_modules__[id] is not a function` during client chunk init.
+   */
+  transpilePackages: ["recharts", "recharts-scale"],
 
   /**
    * Avoid intermittent production build failures (e.g. MODULE_NOT_FOUND for

@@ -6,7 +6,7 @@ import {
   PRODUCT_INFRA_BREAKDOWN,
   getProductDataInfraFlatLines,
   computeProductDataInfraGrandTotalUsd,
-  formatUsdWhole,
+  formatRaiseBucketTotalUsd,
 } from "@/components/strategy/pitchDeckUofTemplates";
 
 function infraScenarioTotal(breakdown, year) {
@@ -30,7 +30,7 @@ export default function ProductDataInfraDetails({ year, allocationDetails = [] }
 
   const flatLines = useMemo(() => getProductDataInfraFlatLines(), []);
 
-  const grandTotalUsd = useMemo(
+  const listedTotal = useMemo(
     () => computeProductDataInfraGrandTotalUsd(year, allocationDetails),
     [year, allocationDetails],
   );
@@ -255,7 +255,7 @@ export default function ProductDataInfraDetails({ year, allocationDetails = [] }
           Total (Product + Data Infra)
         </span>
         <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 700, color: C.gold }}>
-          {formatUsdWhole(grandTotalUsd)}
+          {formatRaiseBucketTotalUsd(listedTotal)}
         </span>
       </div>
     </div>
