@@ -1,4 +1,4 @@
-/** Shared palette for `PitchDeckSlash` and deck subcomponents (matches valet_pitch_deck_v3). */
+/** Shared palette for `PitchDeckSlash` and deck subcomponents (aligned with reference Pitch Deck v5). */
 export const C = {
   greenDeep: "#1E3A2F",
   greenPrimary: "#2D4A3E",

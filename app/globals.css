@@ -29,6 +29,11 @@
   padding: 0;
 }
 
+html {
+  /* Avoid default white canvas showing as a thin frame at viewport edges / overscroll. */
+  background-color: var(--green-dark);
+}
+
 html,
 body {
   height: 100%;

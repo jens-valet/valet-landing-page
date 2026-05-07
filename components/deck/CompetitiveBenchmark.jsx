@@ -27,12 +27,12 @@ export function CompetitiveBenchmark() {
   ];
   const rows = competitors.filter((c) => c.isValet || filter === "all" || c.type === filter);
   const dotStyle = (level) => ({
-    width: 14,
-    height: 14,
+    width: 12,
+    height: 12,
     borderRadius: "50%",
     margin: "0 auto",
     background: level === "yes" ? C.greenAccent : level === "partial" ? C.goldDark : C.creamDark + "55",
-    boxShadow: level === "yes" ? `0 0 12px ${C.greenAccent}66` : level === "partial" ? `0 0 10px ${C.goldDark}55` : "none",
+    boxShadow: level === "yes" ? `0 0 6px ${C.greenAccent}44` : level === "partial" ? `0 0 6px ${C.goldDark}33` : "none",
   });
   const barColor = (score) => (score >= 80 ? C.greenAccent : score >= 50 ? C.goldDark : C.red);
   return (
@@ -71,8 +71,8 @@ export function CompetitiveBenchmark() {
           { l: "No / absent", c: C.creamDark + "55" },
         ].map((x, i) => (
           <div key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <div style={{ width: 12, height: 12, borderRadius: "50%", background: x.c }} />
-            <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: 11, color: C.charcoalLight }}>{x.l}</span>
+            <div style={{ width: 10, height: 10, borderRadius: "50%", background: x.c }} />
+            <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: 11, color: C.muted }}>{x.l}</span>
           </div>
         ))}
       </div>
@@ -158,7 +158,7 @@ export function CompetitiveBenchmark() {
                     ) : (
                       <>
                         <div style={{ fontFamily: "'Outfit', sans-serif", fontSize: 13, color: C.charcoal, fontWeight: 500 }}>{comp.name}</div>
-                        <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9.5, color: C.charcoalLight, marginTop: 2 }}>{comp.sub}</div>
+                        <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 9.5, color: C.muted, marginTop: 2 }}>{comp.sub}</div>
                       </>
                     )}
                   </td>
@@ -172,7 +172,7 @@ export function CompetitiveBenchmark() {
                       <div
                         style={{
                           flex: 1,
-                          height: 9,
+                          height: 7,
                           background: isV ? C.greenMid + "44" : C.creamDark,
                           borderRadius: 4,
                           overflow: "hidden",

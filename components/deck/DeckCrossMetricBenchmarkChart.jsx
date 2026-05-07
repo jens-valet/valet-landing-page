@@ -15,13 +15,25 @@ import {
 } from "@/components/ui/chart";
 import { C } from "@/components/deck/pitchDeckColors";
 
-/** Axis tick fill — overrides ChartContainer’s default `fill-muted-foreground` on Recharts ticks. */
+/** Axis tick fill - overrides ChartContainer default tick styling where needed. */
 const AXIS_TICK_FILL = C.charcoal;
 
-const COHORT_N = 10;
+/** Slash deck condensed italic (matches section titles). */
+const SLASH_CHART_FONT = "'Saira Extra Condensed', sans-serif";
 
 /**
- * Static snapshot of the Strategy Hub → Benchmarks → Valuation accuracy → cross-metric chart.
+ * Explicit colors for Recharts SVG fills (CSS variables often do not resolve on `<rect>` in Recharts).
+ * Values align with `:root` in `app/globals.css` (`--primary`, `--benchmark-*`).
+ */
+const BENCHMARK_COLORS = {
+  valet: "hsl(152 32% 28%)",
+  hagerty: "hsl(210 38% 46%)",
+  kbb: "hsl(270 28% 48%)",
+  edmunds: "hsl(15 42% 48%)",
+};
+
+/**
+ * Static snapshot of the Strategy Hub -> Benchmarks -> Valuation accuracy -> cross-metric chart.
  * Update these rows when the source cohort in `ValuationAccuracy.jsx` changes and you want the deck to match.
  */
 const DATA = [
@@ -30,17 +42,17 @@ const DATA = [
 ];
 
 const chartConfig = {
-  valet: { label: "Valet", color: "hsl(var(--primary))" },
-  hagerty: { label: "Hagerty", color: "var(--benchmark-hagerty)" },
-  kbb: { label: "KBB", color: "var(--benchmark-kbb)" },
-  edmunds: { label: "Edmunds", color: "var(--benchmark-edmunds)" },
+  valet: { label: "Valet", color: BENCHMARK_COLORS.valet },
+  hagerty: { label: "Hagerty", color: BENCHMARK_COLORS.hagerty },
+  kbb: { label: "KBB", color: BENCHMARK_COLORS.kbb },
+  edmunds: { label: "Edmunds", color: BENCHMARK_COLORS.edmunds },
 };
 
 const LEGEND = [
-  { key: "valet", label: "Valet", fill: "hsl(var(--primary))" },
-  { key: "hagerty", label: "Hagerty", fill: "var(--benchmark-hagerty)" },
-  { key: "kbb", label: "KBB", fill: "var(--benchmark-kbb)" },
-  { key: "edmunds", label: "Edmunds", fill: "var(--benchmark-edmunds)" },
+  { key: "valet", label: "Valet", fill: BENCHMARK_COLORS.valet },
+  { key: "hagerty", label: "Hagerty", fill: BENCHMARK_COLORS.hagerty },
+  { key: "kbb", label: "KBB", fill: BENCHMARK_COLORS.kbb },
+  { key: "edmunds", label: "Edmunds", fill: BENCHMARK_COLORS.edmunds },
 ];
 
 function PercentBarLabel(props) {
@@ -58,7 +70,9 @@ function PercentBarLabel(props) {
       fill={AXIS_TICK_FILL}
       textAnchor="middle"
       fontSize={11}
-      fontWeight={600}
+      fontWeight={800}
+      fontStyle="italic"
+      fontFamily={SLASH_CHART_FONT}
       className="deck-tabular-nums"
     >
       {`${Math.round(n)}%`}
@@ -66,8 +80,46 @@ function PercentBarLabel(props) {
   );
 }
 
+function SlashXAxisTick({ x, y, payload }) {
+  if (payload?.value == null) return null;
+  return (
+    <text
+      x={x}
+      y={y}
+      dy={14}
+      fill={AXIS_TICK_FILL}
+      textAnchor="middle"
+      fontSize={11}
+      fontWeight={800}
+      fontStyle="italic"
+      fontFamily={SLASH_CHART_FONT}
+    >
+      {payload.value}
+    </text>
+  );
+}
+
+function SlashYAxisTick({ x, y, payload }) {
+  if (payload?.value == null) return null;
+  return (
+    <text
+      x={x}
+      y={y}
+      dy={3}
+      fill={AXIS_TICK_FILL}
+      textAnchor="end"
+      fontSize={11}
+      fontWeight={800}
+      fontStyle="italic"
+      fontFamily={SLASH_CHART_FONT}
+    >
+      {`${payload.value}%`}
+    </text>
+  );
+}
+
 /**
- * Grouped bar chart only — same visual as Strategy Hub valuation benchmark (no tabs / source table).
+ * Grouped bar chart only - same visual as Strategy Hub valuation benchmark (no tabs / source table).
  */
 export function DeckCrossMetricBenchmarkChart() {
   return (
@@ -97,11 +149,11 @@ export function DeckCrossMetricBenchmarkChart() {
             margin: 0,
           }}
         >
-          Same four platforms (Valet + Hagerty, KBB, Edmunds) across two dimensions —{" "}
-          <span style={{ color: C.charcoalLight, fontWeight: 600 }}>0–100 scores</span> (higher is better).
-          Valuation uses <span style={{ color: C.charcoalLight, fontWeight: 600 }}>100 − MAE%</span>. All four
+          Same four platforms (Valet + Hagerty, KBB, Edmunds) across two dimensions -{" "}
+          <span style={{ color: C.charcoalLight, fontWeight: 600 }}>0-100 scores</span> (higher is better).
+          Valuation uses <span style={{ color: C.charcoalLight, fontWeight: 600 }}>100 - MAE%</span>. All four
           platforms&apos; <span style={{ color: C.charcoalLight, fontWeight: 600 }}>accuracy and coverage</span>{" "}
-          follow the Source data cohort ({COHORT_N} cars).
+          follow the Source data cohort.
         </p>
       </div>
 
@@ -123,8 +175,10 @@ export function DeckCrossMetricBenchmarkChart() {
               display: "inline-flex",
               alignItems: "center",
               gap: 10,
-              fontFamily: "'Outfit', sans-serif",
+              fontFamily: SLASH_CHART_FONT,
               fontSize: 14,
+              fontWeight: 800,
+              fontStyle: "italic",
               color: C.charcoalLight,
             }}
             role="listitem"
@@ -140,7 +194,7 @@ export function DeckCrossMetricBenchmarkChart() {
               }}
               aria-hidden
             />
-            <span style={{ fontWeight: 500 }}>{item.label}</span>
+            <span>{item.label}</span>
           </span>
         ))}
       </div>
@@ -166,7 +220,7 @@ export function DeckCrossMetricBenchmarkChart() {
               dataKey="category"
               tickLine={false}
               axisLine={false}
-              tick={{ fontSize: 11, fill: AXIS_TICK_FILL }}
+              tick={<SlashXAxisTick />}
               interval={0}
               height={52}
             />
@@ -174,10 +228,9 @@ export function DeckCrossMetricBenchmarkChart() {
               domain={[0, 100]}
               tickLine={false}
               axisLine={false}
-              width={40}
+              width={44}
               ticks={[0, 20, 40, 60, 80, 100]}
-              tickFormatter={(v) => `${v}%`}
-              tick={{ fontSize: 11, fill: AXIS_TICK_FILL, fontWeight: 500 }}
+              tick={<SlashYAxisTick />}
             />
             <ChartTooltip
               cursor={false}
@@ -188,16 +241,16 @@ export function DeckCrossMetricBenchmarkChart() {
                 />
               }
             />
-            <Bar dataKey="valet" fill="hsl(var(--primary))" name="Valet" radius={[0, 0, 0, 0]} maxBarSize={26}>
+            <Bar dataKey="valet" fill={BENCHMARK_COLORS.valet} name="Valet" radius={[0, 0, 0, 0]} maxBarSize={26}>
               <LabelList dataKey="valet" content={<PercentBarLabel />} />
             </Bar>
-            <Bar dataKey="hagerty" fill="var(--benchmark-hagerty)" name="Hagerty" radius={[0, 0, 0, 0]} maxBarSize={26}>
+            <Bar dataKey="hagerty" fill={BENCHMARK_COLORS.hagerty} name="Hagerty" radius={[0, 0, 0, 0]} maxBarSize={26}>
               <LabelList dataKey="hagerty" content={<PercentBarLabel />} />
             </Bar>
-            <Bar dataKey="kbb" fill="var(--benchmark-kbb)" name="KBB" radius={[0, 0, 0, 0]} maxBarSize={26}>
+            <Bar dataKey="kbb" fill={BENCHMARK_COLORS.kbb} name="KBB" radius={[0, 0, 0, 0]} maxBarSize={26}>
               <LabelList dataKey="kbb" content={<PercentBarLabel />} />
             </Bar>
-            <Bar dataKey="edmunds" fill="var(--benchmark-edmunds)" name="Edmunds" radius={[0, 0, 0, 0]} maxBarSize={26}>
+            <Bar dataKey="edmunds" fill={BENCHMARK_COLORS.edmunds} name="Edmunds" radius={[0, 0, 0, 0]} maxBarSize={26}>
               <LabelList dataKey="edmunds" content={<PercentBarLabel />} />
             </Bar>
           </BarChart>
