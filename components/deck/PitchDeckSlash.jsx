@@ -1091,7 +1091,7 @@ export default function PitchDeckSlash({
                     })}
                   </div>
                 </div>
-                <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+                <div style={{ display: "flex", justifyContent: "center", width: "100%", overscrollBehavior: "contain" }}>
                   <div
                     style={{
                       width: `min(${demoFrameMaxW}px, calc(100vw - 48px))`,
@@ -1101,6 +1101,7 @@ export default function PitchDeckSlash({
                       border: `2px solid ${DEMO_BEZEL_BORDER_OUTER}`,
                       background: DEMO_BEZEL_BG,
                       boxShadow: "0 20px 40px rgba(0,0,0,0.35)",
+                      overscrollBehavior: "contain",
                     }}
                   >
                     <div
@@ -1112,6 +1113,7 @@ export default function PitchDeckSlash({
                         overflow: "hidden",
                         border: `1px solid ${DEMO_BEZEL_BORDER_INNER}`,
                         background: C.charcoal,
+                        overscrollBehavior: "contain",
                       }}
                     >
                       <iframe
@@ -1125,6 +1127,7 @@ export default function PitchDeckSlash({
                           height: "100%",
                           border: "none",
                           background: C.cream,
+                          overscrollBehavior: "contain",
                         }}
                       />
                     </div>
