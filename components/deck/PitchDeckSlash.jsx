@@ -555,11 +555,15 @@ function DemoViewportIcon({ variant, color }) {
 export default function PitchDeckSlash({
   /** When true (e.g. after `DeckUnlockGate` on `/deck`), skip cover password. */
   gateAutoUnlocked = false,
+  /** When `gateAutoUnlocked`, which demo tier to use: `pitch` = live demo (if enabled), `valet` = locked placeholder. */
+  autoUnlockMode = "pitch",
   /** When true, slide 09 embeds `/garage?deckEmbed=1` in a phone frame (same session as this origin). */
   embedLiveProductDemo = false,
 } = {}) {
   const [unlocked, setUnlocked] = useState(() => (gateAutoUnlocked ? true : false));
-  const [unlockMode, setUnlockMode] = useState(() => (gateAutoUnlocked ? "pitch" : "valet"));
+  const [unlockMode, setUnlockMode] = useState(() =>
+    gateAutoUnlocked ? autoUnlockMode : "valet",
+  );
   const [pw, setPw] = useState("");
   const [pwError, setPwError] = useState(false);
   const [demoViewport, setDemoViewport] = useState("mobile");
@@ -567,7 +571,7 @@ export default function PitchDeckSlash({
   useEffect(() => {
     if (gateAutoUnlocked) {
       setUnlocked(true);
-      setUnlockMode("pitch");
+      setUnlockMode(autoUnlockMode);
       return;
     }
     const s = readDeckSession();
@@ -578,7 +582,7 @@ export default function PitchDeckSlash({
       setUnlocked(false);
       setUnlockMode("valet");
     }
-  }, [gateAutoUnlocked]);
+  }, [gateAutoUnlocked, autoUnlockMode]);
 
   const VALET_PASS = "Valet2026";
   const PITCH_PASS = "Pitch2026";
